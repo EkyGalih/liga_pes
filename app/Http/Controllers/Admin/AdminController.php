@@ -35,6 +35,21 @@ class AdminController extends Controller
         return view('tambah_player');
     }
 
+    public function dashboard()
+    {
+        $user = Statistik::join('users', 'statistik.user_id', '=', 'users.id')
+        ->orderBy('poin', 'DESC')
+        ->orderBy('GM', 'DESC')
+        ->get();
+        $t_win = Statistik::select('win')->sum('win');
+        $t_lose = Statistik::select('lose')->sum('lose');
+        $t_draw = Statistik::select('draw')->sum('draw');
+        $t_gm = Statistik::select('GM')->sum('GM');
+        $t_gl = Statistik::select('GL')->sum('GL');
+
+        return view('dashboard', compact('user', 't_win', 't_lose', 't_draw', 't_gm', 't_gl'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *

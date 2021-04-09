@@ -11,11 +11,11 @@
 |
 */
 
-Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
-
+Route::get('/', 'Admin\AdminController@dashboard')->name('dashboard');
+Route::get('statistik/{id}', 'User\UserController@show')->name('statistik');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/admin', 'HomeController@index')->name('admin');
 Route::post('register', 'Auth\RegisterController@create')->name('resgiter');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {

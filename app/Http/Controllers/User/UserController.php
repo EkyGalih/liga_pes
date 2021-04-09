@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Statistik;
 
 class UserController extends Controller
 {
@@ -46,7 +47,24 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $bulan = date('M');
+        $stat = Statistik::join('users', 'statistik.user_id', '=', 'users.id')
+        ->where('user_id', '=', $id)
+        ->where('bulan', '=', $bulan)
+        ->select('name','win','lose','draw','bulan')
+        ->first();
+
+        if ($stat == null) {
+            return redirect()->back()->with(['fail' => 'Player belum memiliki pertandingan']);
+        }
+
+        $goal = Statistik::join('users', 'statistik.user_id', '=', 'users.id')
+        ->where('statistik.user_id', '=', $id)
+        ->where('bulan', '=', $bulan)
+        ->select('GM','GL')
+        ->first();
+
+        return view('statistik', compact('stat', 'goal'));
     }
 
     /**
